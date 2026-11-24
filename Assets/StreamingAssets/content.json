@@ -1,0 +1,234 @@
+{
+  "signals": [
+    {
+      "id": "signal_station_01",
+      "title": "Первый контакт",
+      "body": "Сквозь треск пробивается испуганный голос: «Алло... Кто-нибудь меня слышит? Мы заперты на старой станции. Здесь темно. Пожалуйста, ответьте».",
+      "frequency": 88.5,
+      "tolerance": 0.04,
+      "audioResourcePath": "",
+      "availability": {
+        "minimumDay": 1,
+        "maximumDay": 1,
+        "requiredFlags": [],
+        "forbiddenFlags": [],
+        "parameterConditions": []
+      },
+      "responses": [
+        {
+          "id": "station_help",
+          "text": "«Я вас слышу. Постарайтесь сохранять спокойствие. Я попробую помочь».",
+          "batteryCost": 5,
+          "effects": [
+            {
+              "parameter": 0,
+              "amount": 10
+            },
+            {
+              "parameter": 1,
+              "amount": -5
+            }
+          ],
+          "flagsToAdd": [
+            "helped_station"
+          ],
+          "flagsToRemove": [],
+          "nextSignalId": "",
+          "advanceDay": true
+        },
+        {
+          "id": "station_ignore",
+          "text": "Отключить передачу и ничего не отвечать.",
+          "batteryCost": 2,
+          "effects": [
+            {
+              "parameter": 1,
+              "amount": 10
+            }
+          ],
+          "flagsToAdd": [
+            "ignored_station"
+          ],
+          "flagsToRemove": [],
+          "nextSignalId": "",
+          "advanceDay": true
+        }
+      ]
+    },
+    {
+      "id": "signal_child_02",
+      "title": "Тихий голос",
+      "body": "На знакомой частоте появляется слабый детский голос: «Вы ведь обещали, что вернётесь?.. Я всё ещё жду».",
+      "frequency": 91.2,
+      "tolerance": 0.04,
+      "audioResourcePath": "",
+      "availability": {
+        "minimumDay": 2,
+        "maximumDay": 99,
+        "requiredFlags": [
+          "helped_station"
+        ],
+        "forbiddenFlags": [],
+        "parameterConditions": []
+      },
+      "responses": [
+        {
+          "id": "child_reassure",
+          "text": "«Я помню о тебе. Держись, я постараюсь найти помощь».",
+          "batteryCost": 7,
+          "effects": [
+            {
+              "parameter": 0,
+              "amount": 8
+            },
+            {
+              "parameter": 1,
+              "amount": -3
+            }
+          ],
+          "flagsToAdd": [
+            "promised_return"
+          ],
+          "flagsToRemove": [],
+          "nextSignalId": "",
+          "advanceDay": true
+        },
+        {
+          "id": "child_doubt",
+          "text": "«Я не уверен, что смогу тебе помочь».",
+          "batteryCost": 3,
+          "effects": [
+            {
+              "parameter": 1,
+              "amount": 8
+            }
+          ],
+          "flagsToAdd": [
+            "lost_hope"
+          ],
+          "flagsToRemove": [],
+          "nextSignalId": "",
+          "advanceDay": true
+        }
+      ]
+    },
+    {
+      "id": "signal_static_03",
+      "title": "Чужая частота",
+      "body": "Вместо голоса слышен ровный металлический стук. Через несколько секунд помехи складываются в слова: «НЕ ИЩИ ИСТОЧНИК».",
+      "frequency": 104.7,
+      "tolerance": 0.03,
+      "audioResourcePath": "",
+      "availability": {
+        "minimumDay": 2,
+        "maximumDay": 99,
+        "requiredFlags": [],
+        "forbiddenFlags": [],
+        "parameterConditions": [
+          {
+            "parameter": 1,
+            "operation": 2,
+            "value": 55
+          }
+        ]
+      },
+      "responses": [
+        {
+          "id": "static_investigate",
+          "text": "Попытаться определить источник сигнала.",
+          "batteryCost": 10,
+          "effects": [
+            {
+              "parameter": 1,
+              "amount": 15
+            }
+          ],
+          "flagsToAdd": [
+            "investigated_anomaly"
+          ],
+          "flagsToRemove": [],
+          "nextSignalId": "",
+          "advanceDay": true
+        },
+        {
+          "id": "static_disconnect",
+          "text": "Немедленно выключить радио.",
+          "batteryCost": 2,
+          "effects": [
+            {
+              "parameter": 1,
+              "amount": -5
+            }
+          ],
+          "flagsToAdd": [
+            "avoided_anomaly"
+          ],
+          "flagsToRemove": [],
+          "nextSignalId": "",
+          "advanceDay": true
+        }
+      ]
+    }
+  ],
+  "endings": [
+    {
+      "priority": 100,
+      "id": "ending_isolation",
+      "title": "Тишина в ответ",
+      "body": "Вы слишком долго оставались в стороне. Когда радио наконец замолчало, отвечать было уже некому.",
+      "requiredFlags": [
+        "ignored_station"
+      ],
+      "forbiddenFlags": [],
+      "parameterConditions": [
+        {
+          "parameter": 1,
+          "operation": 0,
+          "value": 80
+        }
+      ]
+    },
+    {
+      "priority": 50,
+      "id": "ending_connection",
+      "title": "На другом конце",
+      "body": "Слабый сигнал возвращается. На этот раз в эфире звучит не просьба о помощи, а благодарность. Кто-то услышал вас.",
+      "requiredFlags": [
+        "helped_station",
+        "promised_return"
+      ],
+      "forbiddenFlags": [
+        "investigated_anomaly"
+      ],
+      "parameterConditions": [
+        {
+          "parameter": 0,
+          "operation": 1,
+          "value": 60
+        },
+        {
+          "parameter": 1,
+          "operation": 4,
+          "value": 60
+        }
+      ]
+    },
+    {
+      "priority": 10,
+      "id": "ending_unsettling",
+      "title": "Источник",
+      "body": "Помехи становятся голосом. Он произносит ваши слова раньше, чем вы успеваете их сказать. Радио больше не выключается.",
+      "requiredFlags": [
+        "investigated_anomaly"
+      ],
+      "forbiddenFlags": [],
+      "parameterConditions": [
+        {
+          "parameter": 1,
+          "operation": 1,
+          "value": 65
+        }
+      ]
+    }
+  ]
+}
