@@ -23,6 +23,8 @@ namespace Chastota885
 
         private void Start()
         {
+            Debug.Log("RadioGameUI запущен!");
+
             if (GameManager.Instance != null)
             {
                 visibleSignal = GameManager.Instance.CurrentSignal;
